@@ -1,7 +1,5 @@
-import { Customer } from "../../../../src/domain/entities/Customer";
 import Order from "../../../../src/domain/entities/Order";
 import OrderItem from "../../../../src/domain/entities/OrderItem";
-import { Address } from "../../../../src/domain/value-objects/Address";
 
 describe("Order unit tests", () => {
   it("should not be able to create a new order when id is empty", () => {
