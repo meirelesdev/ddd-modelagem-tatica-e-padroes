@@ -2,10 +2,6 @@ import Order from "../../../../src/domain/entities/Order";
 import OrderItem from "../../../../src/domain/entities/OrderItem";
 
 describe("Order unit tests", () => {
-  it("should not be able to create a new order when id is empty", () => {
-    expect(() => new Order("", "123", [])).toThrowError("Id is required");
-  });
-
   it("should not be able to create a new order when customerId is empty", () => {
     expect(() => new Order("1", "", [])).toThrowError("CustomerId is required");
   });

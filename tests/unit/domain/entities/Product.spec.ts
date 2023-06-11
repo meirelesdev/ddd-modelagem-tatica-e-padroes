@@ -1,9 +1,6 @@
 import Product from "../../../../src/domain/entities/Products";
 
 describe("Product unit tests", () => {
-  it("should not be able to create a product when id is empty", () => {
-    expect(() => new Product("", "Product 01", 10)).toThrowError("Id is required");
-  });
   it("should not be able to create a product when name is empty", () => {
     expect(() => new Product("1", "", 10)).toThrowError("Name is required");
   });

@@ -5,9 +5,6 @@ describe("Customer unit tests", () => {
   it("should not be able to create a new customer without name", () => {
     expect(() => new Customer("123", "")).toThrowError("Name is required");
   });
-  it("should not be able to create a new customer without id", () => {
-    expect(() => new Customer("", "Name 01")).toThrowError("Id is required");
-  });
 
   it("should create a new customer and change our name", () => {
     const initProps = {

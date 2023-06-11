@@ -1,9 +1,10 @@
-export default class Product {
-  #id: string;
+import BaseEntity from "./BaseEntity";
+
+export default class Product extends BaseEntity {
   #name: string;
   #price: number;
   constructor(id: string, name: string, price: number) {
-    this.#id = id;
+    super(id);
     this.#name = name;
     this.#price = price;
     this.validate();
@@ -12,9 +13,6 @@ export default class Product {
     if (!this.id) throw new Error("Id is required");
     if (!this.name) throw new Error("Name is required");
     if (this.price <= 0) throw new Error("Price must be greater than zero");
-  }
-  get id() {
-    return this.#id;
   }
   get name() {
     return this.#name;

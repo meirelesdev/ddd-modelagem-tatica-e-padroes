@@ -1,21 +1,18 @@
 import { Address } from "../value-objects/Address";
+import BaseEntity from "./BaseEntity";
 
-export class Customer {
-  #id: string;
+export class Customer extends BaseEntity {
   #name: string;
   #active: boolean;
   #address?: Address;
   #points: number;
   constructor(id: string, name: string, address?: Address) {
-    this.#id = id;
+    super(id);
     this.#name = name;
     this.#active = false;
     this.#address = address;
     this.#points = 0;
     this.validate();
-  }
-  get id() {
-    return this.#id;
   }
 
   get address() {
@@ -35,7 +32,7 @@ export class Customer {
   }
 
   validate() {
-    if (this.#id.length === 0) throw new Error("Id is required");
+    if (this.id.length === 0) throw new Error("Id is required");
     if (this.#name.length === 0) throw new Error("Name is required");
   }
 

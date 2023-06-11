@@ -1,18 +1,14 @@
+import BaseEntity from "./BaseEntity";
 import OrderItem from "./OrderItem";
 
-export default class Order {
-  #id: string;
+export default class Order extends BaseEntity {
   #customerId: string;
   #orderItems: OrderItem[];
   constructor(id: string, customerId: string, items: OrderItem[]) {
-    this.#id = id;
+    super(id);
     this.#customerId = customerId;
     this.#orderItems = items;
     this.validate();
-  }
-
-  get id() {
-    return this.#id;
   }
 
   get customerId() {
@@ -20,7 +16,7 @@ export default class Order {
   }
 
   validate(): void {
-    if (!this.#id) throw new Error("Id is required");
+    if (!this.id) throw new Error("Id is required");
     if (!this.#customerId) throw new Error("CustomerId is required");
     if (!this.getItems().length) throw new Error("Item quantity must be greater then zero");
   }

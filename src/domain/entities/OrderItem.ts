@@ -1,5 +1,6 @@
-export default class OrderItem {
-  id: string;
+import BaseEntity from "./BaseEntity";
+
+export default class OrderItem extends BaseEntity {
   productId: string;
   name: string;
   price: number;
@@ -17,7 +18,7 @@ export default class OrderItem {
     price: number;
     quantity: number;
   }) {
-    this.id = id;
+    super(id);
     this.productId = productId;
     this.name = name;
     this.price = price;
