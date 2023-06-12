@@ -1,5 +1,5 @@
-import Order from "../../../../src/domain/entities/Order";
-import OrderItem from "../../../../src/domain/entities/OrderItem";
+import Order from "../../../src/domain/entities/Order";
+import OrderItem from "../../../src/domain/entities/OrderItem";
 
 describe("Order unit tests", () => {
   it("should not be able to create a new order when customerId is empty", () => {

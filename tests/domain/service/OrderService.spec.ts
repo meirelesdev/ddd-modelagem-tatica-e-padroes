@@ -1,7 +1,7 @@
-import { Customer } from "../../../../src/domain/entities/Customer";
-import Order from "../../../../src/domain/entities/Order";
-import OrderItem from "../../../../src/domain/entities/OrderItem";
-import OrderService from "../../../../src/domain/service/OrderService";
+import { Customer } from "../../../src/domain/entities/Customer";
+import Order from "../../../src/domain/entities/Order";
+import OrderItem from "../../../src/domain/entities/OrderItem";
+import OrderService from "../../../src/domain/service/OrderService";
 
 let order1: Order;
 let order2: Order;

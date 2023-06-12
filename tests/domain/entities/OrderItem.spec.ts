@@ -1,5 +1,5 @@
-import Order from "../../../../src/domain/entities/Order";
-import OrderItem from "../../../../src/domain/entities/OrderItem";
+import Order from "../../../src/domain/entities/Order";
+import OrderItem from "../../../src/domain/entities/OrderItem";
 
 describe("OrderItem unit tests", () => {
   it("should create a new order item", () => {

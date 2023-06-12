@@ -1,5 +1,5 @@
-import { Customer } from "../../../../src/domain/entities/Customer";
-import { Address } from "../../../../src/domain/value-objects/Address";
+import { Customer } from "../../../src/domain/entities/Customer";
+import { Address } from "../../../src/domain/value-objects/Address";
 
 describe("Customer unit tests", () => {
   it("should not be able to create a new customer without name", () => {
