@@ -35,6 +35,13 @@ export default class OrderRepositorySequelize implements OrderRepositoryInterfac
       { where: { id: entity.id } }
     );
     const items = entity.getItems();
+    const itemsModel = await this.getOrderItems(entity.id);
+    const itemsToRemove = itemsModel.filter((itemModel) =>
+      items.every((item) => item.id !== itemModel.id)
+    );
+    for (const itemToRemove of itemsToRemove) {
+      await this.deleteOrderItem(itemToRemove.id);
+    }
     for (const item of items) {
       await OrderItemModel.update(
         {
@@ -52,6 +59,15 @@ export default class OrderRepositorySequelize implements OrderRepositoryInterfac
       );
     }
   }
+
+  private async getOrderItems(orderId: string): Promise<OrderItemModel[]> {
+    return OrderItemModel.findAll({ where: { orderId } });
+  }
+
+  private async deleteOrderItem(orderItemId: string): Promise<void> {
+    await OrderItemModel.destroy({ where: { id: orderItemId } });
+  }
+
   async find(id: string): Promise<Order> {
     const { dataValues } = await OrderModel.findOne({
       where: { id },

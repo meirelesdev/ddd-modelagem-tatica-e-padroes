@@ -89,7 +89,7 @@ describe("Order repository tests", () => {
     expect(dataValues.total).toBe(order.getTotal());
   });
 
-  it("should update a order", async () => {
+  it("should update a order item", async () => {
     const customerRepository = new CustomerRepositorySequelize();
     const initCustomerProps = {
       id: "123",
@@ -146,6 +146,71 @@ describe("Order repository tests", () => {
     expect(updatedItem.name).toBe("New name");
   });
 
+  it("should remove a order item", async () => {
+    const customerRepository = new CustomerRepositorySequelize();
+    const initCustomerProps = {
+      id: "123",
+      name: "Customer 1",
+    };
+    const customer = new Customer(initCustomerProps.id, initCustomerProps.name);
+    const initAddressProps = {
+      street: "Street 1",
+      number: "01",
+      city: "City 1",
+      state: "State 1",
+      zipcode: "88800-0088",
+    };
+
+    const address = new Address(
+      initAddressProps.street,
+      initAddressProps.number,
+      initAddressProps.city,
+      initAddressProps.state,
+      initAddressProps.zipcode
+    );
+    customer.addAddress(address);
+    await customerRepository.create(customer);
+    const productRepository = new ProductRepositorySequelize();
+    const initProductProps = {
+      id: "123",
+      name: "Product 1",
+      price: 10,
+    };
+    const product = new Product(initProductProps);
+    await productRepository.create(product);
+    const initOrderItemProps = {
+      id: "1",
+      name: product.name,
+      price: product.price,
+      productId: product.id,
+      quantity: 2,
+    };
+    const orderItem = new OrderItem(initOrderItemProps);
+    const initOrderItemProps2 = {
+      id: "2",
+      name: "Product 2",
+      price: 10,
+      productId: "123456",
+      quantity: 2,
+    };
+    const orderItem2 = new OrderItem(initOrderItemProps2);
+    const initOrderProps = {
+      id: "123",
+      customerId: customer.id,
+      items: [orderItem, orderItem2],
+    };
+    const order = new Order(initOrderProps.id, initOrderProps.customerId, initOrderProps.items);
+    const orderRepository = new OrderRepositorySequelize();
+    await orderRepository.create(order);
+
+    order.removeItem(orderItem.id);
+    await orderRepository.update(order);
+
+    const orderUpdated = await orderRepository.find(order.id);
+    expect(orderUpdated.getItems()).toHaveLength(1);
+    expect(orderUpdated.getTotal()).toBe(order.getTotal());
+  });
+
   it("should find all orders", async () => {
     const initOrderItemProps1 = {
       id: "1",
@@ -162,7 +227,7 @@ describe("Order repository tests", () => {
       items: [orderItem1],
     };
     const order1 = new Order(initOrderProps1.id, initOrderProps1.customerId, initOrderProps1.items);
-    
+
     const initOrderItemProps2 = {
       id: "2",
       name: "Product 02",
