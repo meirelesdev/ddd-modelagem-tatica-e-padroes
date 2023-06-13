@@ -42,22 +42,44 @@ export default class OrderRepositorySequelize implements OrderRepositoryInterfac
     for (const itemToRemove of itemsToRemove) {
       await this.deleteOrderItem(itemToRemove.id);
     }
-    for (const item of items) {
-      await OrderItemModel.update(
-        {
-          productId: item.productId,
-          total: item.getTotal(),
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-        },
-        {
-          where: {
-            id: item.id,
-          },
-        }
-      );
+    const itemsModelUpdated = await this.getOrderItems(entity.id);
+    const itemsToAdd = items.filter((item) =>
+      itemsModelUpdated.some((itemModel) => itemModel.id !== item.id)
+    );
+    for (const itemToAdd of itemsToAdd) {
+      await this.createOrderItem(entity.id, itemToAdd);
     }
+    for (const item of items) {
+      await this.updateOrderItem(item);
+    }
+  }
+
+  private async updateOrderItem(item: OrderItem): Promise<void> {
+    await OrderItemModel.update(
+      {
+        productId: item.productId,
+        total: item.getTotal(),
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      },
+      {
+        where: {
+          id: item.id,
+        },
+      }
+    );
+  }
+
+  private async createOrderItem(orderId: string, orderItem: OrderItem): Promise<void> {
+    await OrderItemModel.create({
+      id: orderItem.id,
+      productId: orderItem.productId,
+      orderId,
+      name: orderItem.name,
+      price: orderItem.price,
+      quantity: orderItem.quantity,
+    });
   }
 
   private async getOrderItems(orderId: string): Promise<OrderItemModel[]> {

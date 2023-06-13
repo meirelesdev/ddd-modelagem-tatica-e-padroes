@@ -211,6 +211,42 @@ describe("Order repository tests", () => {
     expect(orderUpdated.getTotal()).toBe(order.getTotal());
   });
 
+  it("should add a new order item on order", async () => {
+    const initOrderItemProps = {
+      id: "1",
+      name: "Product 01",
+      price: 10,
+      productId: "1",
+      quantity: 2,
+    };
+    const orderItem = new OrderItem(initOrderItemProps);
+    const initOrderProps = {
+      id: "123",
+      customerId: "123",
+      items: [orderItem],
+    };
+    const order = new Order(initOrderProps.id, initOrderProps.customerId, initOrderProps.items);
+    const orderRepository = new OrderRepositorySequelize();
+    await orderRepository.create(order);
+
+    expect(order.getItems()).toHaveLength(1);
+    const initOrderItemProps2 = {
+      id: "2",
+      name: "Product 2",
+      price: 5,
+      productId: "2",
+      quantity: 2,
+    };
+
+    const orderItem2 = new OrderItem(initOrderItemProps2);
+    order.addItem(orderItem2);
+    await orderRepository.update(order);
+
+    const orderUpdated = await orderRepository.find(order.id);
+    expect(orderUpdated.getItems()).toHaveLength(2);
+    expect(orderUpdated.getTotal()).toBe(order.getTotal());
+  });
+
   it("should find all orders", async () => {
     const initOrderItemProps1 = {
       id: "1",
