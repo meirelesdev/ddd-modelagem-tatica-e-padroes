@@ -32,7 +32,6 @@ export class Customer extends BaseEntity {
   }
 
   validate() {
-    if (this.id.length === 0) throw new Error("Id is required");
     if (this.#name.length === 0) throw new Error("Name is required");
   }
 

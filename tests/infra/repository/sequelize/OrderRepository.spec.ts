@@ -89,7 +89,7 @@ describe("Order repository tests", () => {
     expect(dataValues.total).toBe(order.getTotal());
   });
 
-  it("should update a new order", async () => {
+  it("should update a order", async () => {
     const customerRepository = new CustomerRepositorySequelize();
     const initCustomerProps = {
       id: "123",
@@ -137,6 +137,52 @@ describe("Order repository tests", () => {
     const order = new Order(initOrderProps.id, initOrderProps.customerId, initOrderProps.items);
     const orderRepository = new OrderRepositorySequelize();
     await orderRepository.create(order);
+
+    order.updateOrderItem(orderItem.id, { name: "New name" });
+    await orderRepository.update(order);
+
+    const orderUpdated = await orderRepository.find(order.id);
+    const updatedItem = orderUpdated.getItem(orderItem.id);
+    expect(updatedItem.name).toBe("New name");
+  });
+
+  it("should find all orders", async () => {
+    const initOrderItemProps1 = {
+      id: "1",
+      name: "Product 01",
+      price: 10,
+      productId: "123",
+      quantity: 2,
+    };
+    const orderItem1 = new OrderItem(initOrderItemProps1);
+
+    const initOrderProps1 = {
+      id: "123",
+      customerId: "123",
+      items: [orderItem1],
+    };
+    const order1 = new Order(initOrderProps1.id, initOrderProps1.customerId, initOrderProps1.items);
+    
+    const initOrderItemProps2 = {
+      id: "2",
+      name: "Product 02",
+      price: 10,
+      productId: "1234",
+      quantity: 3,
+    };
+    const orderItem2 = new OrderItem(initOrderItemProps2);
+    const initOrderProps2 = {
+      id: "123456",
+      customerId: "123",
+      items: [orderItem2],
+    };
+    const order2 = new Order(initOrderProps2.id, initOrderProps2.customerId, initOrderProps2.items);
+    const orderRepository = new OrderRepositorySequelize();
+    await orderRepository.create(order1);
+    await orderRepository.create(order2);
+
+    const orders = await orderRepository.findAll();
+    expect(orders).toHaveLength(2);
   });
 
   afterEach(async () => {
