@@ -1,7 +1,8 @@
 import BaseEntity from "../../@shared/BaseEntity";
 import { Address } from "../value-objects/Address";
+import CustomerInterface from "./CustomerInterface";
 
-export class Customer extends BaseEntity {
+export class Customer extends BaseEntity implements CustomerInterface {
   #name: string;
   #active: boolean;
   #address?: Address;
@@ -14,8 +15,11 @@ export class Customer extends BaseEntity {
     this.#points = 0;
     this.validate();
   }
+  validate() {
+    if (this.#name.length === 0) throw new Error("Name is required");
+  }
 
-  get address() {
+  get address(): Address {
     return this.#address;
   }
 
@@ -29,10 +33,6 @@ export class Customer extends BaseEntity {
 
   setPoints(value: number) {
     this.#points += value;
-  }
-
-  validate() {
-    if (this.#name.length === 0) throw new Error("Name is required");
   }
 
   changeName(name: string) {
@@ -49,11 +49,11 @@ export class Customer extends BaseEntity {
     this.#active = true;
   }
 
-  deactivate() {
+  deactivate(): void {
     this.#active = false;
   }
 
-  addAddress(address: Address) {
+  addAddress(address: Address): void {
     this.#address = address;
   }
 }

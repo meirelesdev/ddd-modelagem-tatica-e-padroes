@@ -1,11 +1,12 @@
 import BaseEntity from "../../@shared/BaseEntity";
+import ProductInterface from "./ProductInterface";
 
 type ProductProps = {
   id?: string;
   name: string;
   price: number;
 };
-export default class Product extends BaseEntity {
+export default class Product extends BaseEntity implements ProductInterface {
   #name: string;
   #price: number;
   constructor(props: ProductProps) {
